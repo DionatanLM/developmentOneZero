@@ -1,6 +1,6 @@
 
-## Esse é um desafio onde o objetivo é usar as tecnologias NodeJs, Koa, Mocha e Chai, fazer uma API que permita:
-Adicionar, editar, lista e remover usuários. 
+## ⭐ Desafio onde o objetivo é usar as tecnologias NodeJs, Koa, Mocha e Chai, fazer uma API que permita: Adicionar, editar, lista e remover usuários. 
+<br>
 
 ## 🚀 Executar a aplicação
 Você precisará do Node.js instalado no seu computador para iniciar este aplicativo.
@@ -15,12 +15,14 @@ $ npm test
 
 
 ## 🛠️ Linguagens e Frameworks
-
-* Node.js
-* Koa.js
-* Mocha
-* Chai
-* MySQL
+<br>
+<div>
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" height="100" width="140"/>
+<img src="https://miro.medium.com/max/1000/1*suXzT3k1lYrtR91XRDN7gA.png" height="100" width="100"/>
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mocha/mocha-plain.svg" height="100" width="140"/>
+<img src="https://avatars.githubusercontent.com/u/1515293?s=280&v=4" height="100" width="100"/>
+</div>
+<br>
 
 ## 🤝 Colaboradores
 
