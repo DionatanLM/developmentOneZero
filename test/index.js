@@ -41,13 +41,6 @@ const userSchema = {
 
 //Inicio dos testes
 
-//este teste é simplesmente pra enteder a usar o mocha/chai
-describe('Um simples conjunto de testes', function () {
-    it('deveria retornar -1 quando o valor não esta presente', function () {
-        assert.equal([1, 2, 3].indexOf(4), -1);
-    });
-});
-
 //testes da aplicação
 describe('Testes da aplicaçao',  () => {
     it('o servidor esta online', function (done) {
@@ -59,6 +52,20 @@ describe('Testes da aplicaçao',  () => {
         done();
         });
     });
+
+    it('Deve retornar o status como 200 para /list', function (done) {
+        chai
+            .request('http://localhost:3000')
+            .get('/list')
+            .then(function(res) {
+                expect(res).to.have.status(200);
+                done();
+        })
+        .catch(function(err) {
+            throw (err);
+            })
+        });
+    
 
     it('deveria ser uma lista vazia de usuarios', function (done) {
         chai.request(app)
@@ -72,14 +79,12 @@ describe('Testes da aplicaçao',  () => {
     });
 
     it('deveria criar o usuario raupp', function (done) {
-        chai.request(app)
-        .post('/user')
-        .send({nome: "raupp", email: "jose.raupp@devoz.com.br", idade: 35})
-        .end(function (err, res) {
-            expect(err).to.be.null;
-            expect(res).to.have.status(201);
+        chai.request('http://localhost:3000')
+        .post('/list')
+        .then(function(res) {
+            expect(res).
             done();
-        });
+        })
     });
     //...adicionar pelo menos mais 5 usuarios. se adicionar usuario menor de idade, deve dar erro. Ps: não criar o usuario naoExiste
 
