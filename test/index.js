@@ -10,6 +10,7 @@
 
 const app =  require('../src/index.js');
 
+const add = require('../src/index.js')
 const assert = require('assert');
 const chai = require('chai')
 const chaiHttp = require('chai-http');
@@ -20,27 +21,8 @@ chai.use(chaiJson);
 
 const expect = chai.expect;
 
-//Define o minimo de campos que o usuário deve ter. Geralmente deve ser colocado em um arquivo separado
-const userSchema = {
-    title: "Schema do Usuario, define como é o usuario, linha 24 do teste",
-    type: "object",
-    required: ['nome', 'email', 'idade'],
-    properties: {
-        nome: {
-            type: 'string'
-        },
-        email: {
-            type: 'string'
-        },
-        idade: {
-            type: 'number',
-            minimum: 18
-        }
-    }
-}
 
 //Inicio dos testes
-
 //testes da aplicação
 describe('Testes da aplicaçao',  () => {
     it('o servidor esta online', function (done) {
@@ -55,7 +37,7 @@ describe('Testes da aplicaçao',  () => {
 
     it('Deve retornar o status como 200 para /list', function (done) {
         chai
-            .request('http://localhost:3000')
+            .request(app)
             .get('/list')
             .then(function(res) {
                 expect(res).to.have.status(200);
@@ -64,6 +46,18 @@ describe('Testes da aplicaçao',  () => {
         .catch(function(err) {
             throw (err);
             })
+        });
+
+       it('Testando GET todos os usuarios', function (done) {
+        chai
+            .request(app)
+            .get('/list')
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.be.a('array')
+            done();
+        })
+        
         });
     
 
@@ -78,34 +72,33 @@ describe('Testes da aplicaçao',  () => {
         });
     });
 
-    it('deveria criar o usuario raupp', function (done) {
+    it('deveria ler o usuario raupp', function (done) {
         chai.request('http://localhost:3000')
-        .post('/list')
+        //.post('/list')
+        .get('/list')
         .then(function(res) {
-            expect(res).
-            done();
+        expect(res.add('José Raupp').to.equal(true)).
+        done();
         })
     });
     //...adicionar pelo menos mais 5 usuarios. se adicionar usuario menor de idade, deve dar erro. Ps: não criar o usuario naoExiste
 
     it('o usuario naoExiste não existe no sistema', function (done) {
         chai.request(app)
-        .get('/user/naoExiste')
+        .get('/list')
         .end(function (err, res) {
-            expect(err.response.body.error).to.be.equal('User not found'); //possivelmente forma errada de verificar a mensagem de erro
-            expect(res).to.have.status(404);
-            expect(res.body).to.be.jsonSchema(userSchema);
+            expect(rr.response.body).to.be.equal('naoExiste');
             done();
         });
     });
 
-    it('o usuario raupp existe e é valido', function (done) {
+    it('o usuario José Raupp existe e é valido', function (done) {
         chai.request(app)
-        .get('/user/raupp')
+        .get('/list')
         .end(function (err, res) {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
-            expect(res.body).to.be.jsonSchema(userSchema);
+            expect(res.body.name).to.have.property(5)
             done();
         });
     });
@@ -132,13 +125,13 @@ describe('Testes da aplicaçao',  () => {
         });
     });
 
-    it('deveria ser uma lista com pelomenos 5 usuarios', function (done) {
+    it('deveria ser uma lista com pelo menos 5 usuarios', function (done) {
         chai.request(app)
-        .get('/users')
+        .get('/list')
         .end(function (err, res) {
         expect(err).to.be.null;
         expect(res).to.have.status(200);
-        expect(res.body.total).to.be.at.least(5);
+        expect(res.body).to.have.lengthOf(5);
         done();
         });
     });

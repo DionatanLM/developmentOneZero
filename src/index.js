@@ -5,24 +5,29 @@
 //https://github.com/ZijianHe/koa-router
 
 // todas as configuraçoes devem ser passadas via environment variables
+
 const PORT = process.env.PORT || 3000;
 
 const Koa = require('koa');
 var bodyParser = require('koa-bodyparser');
 const Router = require('koa-router');
+const cors = require('@koa/cors');
+
 
 const koa = new Koa();
-var router = new Router();
+const router = new Router();
 
+var count = 5;
 // Use as middleware
+koa.use(cors());
 koa.use(bodyParser());
 
 var data = [
   {"id":1,"name":"Dionatan","email":"dionatan@gmail.com","idade":19},
   {"id":2,"name":"Luana","email":"Luana@gmail.com","idade":25},
-  {"id":3,"name":"raupp","email":"jose.raupp@devoz.com.br","idade":35},
-  {"id":4,"name":"Luana","email":"Luana@gmail.com","idade":25},
-  {"id":5,"name":"Luana","email":"Luana@gmail.com","idade":25},
+  {"id":3,"name":"José Raupp","email":"jose.raupp@devoz.com.br","idade":35},
+  {"id":4,"name":"Carlos","email":"carlos@gmail.com","idade":45},
+  {"id":5,"name":"Lucas","email":"lucas@gmail.com","idade":16},
 ];
 
 //rota simples pra testar se o servidor está online
@@ -50,20 +55,20 @@ async function add(ctx) {
   var uin = ctx.request.body;
   data.push(uin)
   ctx.body = "Data Added"
+  count + 1
   ctx.status = 200
 }
 
 async function update(ctx) {
   let uin = ctx.request.body;
   const index = data.findIndex((e) => e.id === uin.id)
-  let message;
   if( index === -1){
     data.push(uin)
     ctx.status = 200
     ctx.body = "Data Added"
   } else {
     data[index] = uin
-    ctx.status = 204
+    ctx.status = 200
     ctx.body = "Data Updated"
   }
 }
@@ -75,6 +80,7 @@ async function deleteData(ctx) {
   if(index === -1){
     message = "Data Not Found"
   } else {
+    count - 1
     delete data[index];
     ctx.status = 200
     message= "Data Deleted"
@@ -82,19 +88,12 @@ async function deleteData(ctx) {
 }
 
 
-
-
-
-
-
-
-
-
-
 koa
   .use(router.routes())
   .use(router.allowedMethods());
 
+
 const server = koa.listen(PORT);
 
 module.exports = server;
+
