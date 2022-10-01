@@ -11,6 +11,8 @@ $ cd developmentOneZero
 $ npm install
 $ npm run dev
 $ npm test
+
+$ npx lite-server
 ```
 
 
