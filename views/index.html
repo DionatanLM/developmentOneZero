@@ -21,9 +21,8 @@
     
     async function getContent(){
         try{
-            const response = await fetch('http://localhost:3000/list')
-            const data = await response.json()
-            show(data)
+            const response = await fetch('http://localhost:3000/pessoa')
+            console.log(response)
         } catch(error){
             console.error("ERROU")
         }
@@ -31,18 +30,5 @@
 
     getContent()
 
-    function show(users){
-        let output = ''
-
-        for( let user of users ){
-            output += `<li class="style">${user.id} - <b>Nome:</b> ${user.name} | <b>E-mail:</b> ${user.email} | <b>Idade:</b> ${user.idade}</li><hr>`
-        }
-
-        document.querySelector('main').innerHTML = output
-    }
-
-    function addUsers(users){
-        
-    }
 </script>
 </html>

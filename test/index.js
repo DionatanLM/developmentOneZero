@@ -8,13 +8,15 @@
 //https://www.chaijs.com/plugins/chai-json-schema/
 //https://developer.mozilla.org/pt-PT/docs/Web/HTTP/Status (http codes)
 
-const app =  require('../src/index.js');
+const app =  require('../app.js');
 
-const add = require('../src/index.js')
-const assert = require('assert');
+const add = require('../routes/index.js')
+const assert = require('assert')
+, addRaupp = {'nome':'José Raupp','idade':'35'};
 const chai = require('chai')
 const chaiHttp = require('chai-http');
 const chaiJson = require('chai-json-schema');
+
 
 chai.use(chaiHttp);
 chai.use(chaiJson);
@@ -35,10 +37,10 @@ describe('Testes da aplicaçao',  () => {
         });
     });
 
-    it('Deve retornar o status como 200 para /list', function (done) {
+    it('Deve retornar o status como 200 para /user', function (done) {
         chai
             .request(app)
-            .get('/list')
+            .get('/user')
             .then(function(res) {
                 expect(res).to.have.status(200);
                 done();
@@ -48,90 +50,67 @@ describe('Testes da aplicaçao',  () => {
             })
         });
 
-       it('Testando GET todos os usuarios', function (done) {
-        chai
-            .request(app)
-            .get('/list')
-            .end((err, res) => {
-                res.should.have.status(200);
-                res.body.should.be.a('array')
-            done();
-        })
-        
-        });
-    
-
-    it('deveria ser uma lista vazia de usuarios', function (done) {
+    it('deveria criar o usuario raupp', function (done) {
         chai.request(app)
-        .get('/users')
+        .post('/user/add')
+        .type('json')
         .end(function (err, res) {
-        expect(err).to.be.null;
-        expect(res).to.have.status(200);
-        expect(res.body.rows).to.eql([]);
-        done();
+            expect(err).to.be.null;
+            expect(res.body).assert.property(addRaupp)
+            done();
+            })
         });
-    });
 
     it('deveria ler o usuario raupp', function (done) {
-        chai.request('http://localhost:3000')
-        //.post('/list')
-        .get('/list')
-        .then(function(res) {
-        expect(res.add('José Raupp').to.equal(true)).
-        done();
+        chai.request(app)
+        .get('/user/5')
+        .end(function (err, res) {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            done();
         })
     });
     //...adicionar pelo menos mais 5 usuarios. se adicionar usuario menor de idade, deve dar erro. Ps: não criar o usuario naoExiste
 
     it('o usuario naoExiste não existe no sistema', function (done) {
         chai.request(app)
-        .get('/list')
+        .get('/user')
         .end(function (err, res) {
-            expect(rr.response.body).to.be.equal('naoExiste');
+            expect(res.body).to.be.equal('naoExiste');
+            expect(res).to.have.status(200);
             done();
         });
     });
 
     it('o usuario José Raupp existe e é valido', function (done) {
         chai.request(app)
-        .get('/list')
+        //.post('/list')
+        .get('/user/5')
         .end(function (err, res) {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
-            expect(res.body.name).to.have.property(5)
             done();
         });
     });
+
 
     it('deveria excluir o usuario raupp', function (done) {
         chai.request(app)
-        .delete('/user/raupp')
+        .delete('/user/15')
         .end(function (err, res) {
             expect(err).to.be.null;
-            expect(res).to.have.status(200);
-            expect(res.body).to.be.jsonSchema(userSchema);
+            expect(res.body).console.log('Usuário deletado!');
             done();
         });
     });
 
-    it('o usuario raupp não deve existir mais no sistema', function (done) {
+    it('deveria ser uma lista com 5 ou mais usuarios', function (done) {
         chai.request(app)
-        .get('/user/raupp')
-        .end(function (err, res) {
-            expect(err).to.be.null;
-            expect(res).to.have.status(200);
-            expect(res.body).to.be.jsonSchema(userSchema);
-            done();
-        });
-    });
-
-    it('deveria ser uma lista com pelo menos 5 usuarios', function (done) {
-        chai.request(app)
-        .get('/list')
+        .get('/user')
         .end(function (err, res) {
         expect(err).to.be.null;
         expect(res).to.have.status(200);
-        expect(res.body).to.have.lengthOf(5);
+        expect(res.body).to.have.lengthOf([6]);
         done();
         });
     });
