@@ -3,16 +3,15 @@
 <br>
 
 ## 🚀 Executar a aplicação
-Você precisará do Node.js instalado no seu computador para iniciar este aplicativo.
+Você precisará do Node.js e MySQL instalado no seu computador para iniciar este aplicativo.
 
 ```
 git clone https://github.com/DionatanLM/developmentOneZero.git
 $ cd developmentOneZero
 $ npm install
-$ npm run dev
+$ node app.js
 $ npm test
 
-$ npx lite-server
 ```
 
 
